@@ -75,15 +75,16 @@ void create_project(const char *project_name) {
     sprintf(makefile_content,
         "# Makefile\n\n"
         "CC = gcc\n"
+        "OPTIONS = -std=c11\n"
         "CFLAGS = -Wall -Iinclude\n"
         "SRC_DIR = src\n"
         "BUILD_DIR = build\n"
         "TARGET = $(BUILD_DIR)/%s\n\n"
         "all: $(TARGET)\n\n"
         "$(TARGET):\n"
-        "	$(CC) $(CFLAGS) $(SRC_DIR)/hello.c $(SRC_DIR)/main.c -o $(TARGET)\n\n"
+        "	$(CC) $(OPTIONS) $(CFLAGS) $(SRC_DIR)/hello.c $(SRC_DIR)/main.c -o $(TARGET)\n\n"
         "$(SRC_DIR)/%%.o: $(SRC_DIR)/%%.c\n"
-        "	$(CC) $(CFLAGS) -c $< -o $%%.o\n\n"
+        "	$(CC) $(OPTIONS) $(CFLAGS) -c $< -o $%%.o\n\n"
         "clean:\n"
         "	rm -f $(TARGET)\n\n"
         ".PHONY: all clean\n",

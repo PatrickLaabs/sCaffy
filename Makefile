@@ -1,6 +1,7 @@
 # Makefile
 
 CC = gcc
+OPTIONS = -std=c11
 CFLAGS = -Wall -Iinclude
 SRC_DIR = src
 BUILD_DIR = build
@@ -10,10 +11,10 @@ all: $(TARGET)
 
 $(TARGET):
 	mkdir $(BUILD_DIR)
-	$(CC) $(CFLAGS) $(SRC_DIR)/scaffy.c -o $(TARGET)
+	$(CC) $(OPTIONS) $(CFLAGS) $(SRC_DIR)/scaffy.c -o $(TARGET)
 
 $(SRC_DIR)/%.o: $(SRC_DIR)/%.c
-	$(CC) $(CFLAGS) -c $< -o $%.o
+	$(CC) $(OPTIONS) $(CFLAGS) -c $< -o $%.o
 
 clean:
 	rm -f $(TARGET)
