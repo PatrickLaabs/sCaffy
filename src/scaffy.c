@@ -2,27 +2,11 @@
 #include <stdlib.h>
 #include <string.h>
 #include <sys/stat.h>
+#include "create_directory.h"
+#include "create_file.h"
 
-void create_file(const char *path, const char *content) {
-    FILE *file = fopen(path, "w");
-    if (file == NULL) {
-        perror("Could not create file");
-        exit(EXIT_FAILURE);
-    }
-    fprintf(file, "%s", content);
-    fclose(file);
-}
-
-void create_directory(const char *path) {
-    struct stat st = {0};
-    if (stat(path, &st) == -1) {
-        mkdir(path, 0700);  // Create directory with permissions
-    }
-}
-
-void create_project(const char *project_name) {
-    char include_dir[256], src_dir[256], build_dir[256], doc_dir[256], test_dir[256];
-    char file_path[256];
+int create_project(const char *project_name) {
+    char include_dir[256], src_dir[256], build_dir[256], doc_dir[256], test_dir[256], file_path[256];
 
     // Create directory structure
     sprintf(include_dir, "%s/include", project_name);
@@ -30,6 +14,11 @@ void create_project(const char *project_name) {
     sprintf(build_dir, "%s/build", project_name);
     sprintf(doc_dir, "%s/doc", project_name);
     sprintf(test_dir, "%s/test", project_name);
+
+    if (create_directory(project_name) != 0) {
+        printf("Project directory '%s' already exists.\n", project_name);
+        return 1;
+    }
 
     create_directory(project_name);
     create_directory(include_dir);
@@ -96,14 +85,16 @@ void create_project(const char *project_name) {
     create_file(file_path, makefile_content);
 
     printf("Project '%s' scaffold created successfully!\n", project_name);
+
+    return 0;
 }
 
-int main(int argc, char *argv[]) {
-    if (argc != 2) {
+int main(int args, char *argv[]) {
+    if (args != 2) {
         fprintf(stderr, "Usage: %s <project_name>\n", argv[0]);
-        return EXIT_FAILURE;
+        return 1;
     }
 
     create_project(argv[1]);
-    return EXIT_SUCCESS;
+    return 0;
 }
